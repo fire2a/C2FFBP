@@ -48,12 +48,11 @@ class Cell2Fire {
 		 int year = 1;
 		 int gridNumber = 0;
 		 int weatherperiod = 0;
+		 int counter_wt = 0;
 		 long int nCells;
 		 int nIgnitions = 0;
-		 int counter_wt = 0;
 		 double xllcorner;
 		 double yllcorner;
-		 
 		 // Booleans
 		 bool noIgnition = true;  		//  None = -1
 		 bool messagesSent = false;
@@ -89,6 +88,12 @@ class Cell2Fire {
 		 vector<int> burnedOutList;
 		 std::vector<double> FSCell;
 		 std::vector<float> crownMetrics;
+		 std::vector<int>crownState;
+		 std::vector<float>Intensities;
+		 std::vector<float>crownFraction;
+		 std::vector<float>surfFraction;
+		 std::vector<float>RateOfSpreads;
+
 
 		 //std::vector<unordered_set<int>> IgnitionSets;
 		 std::vector<std::vector<int>> IgnitionSets;
@@ -109,13 +114,13 @@ class Cell2Fire {
 		// Methods
 		void InitCell(int id);
         void reset(int rnumber, double rnumber2, int simExt);
-		bool RunIgnition(std::default_random_engine generator, int rnumber3);
+		bool RunIgnition(std::default_random_engine generator, int ep);
 		std::unordered_map<int, std::vector<int>> SendMessages();
 		void GetMessages(std::unordered_map<int, std::vector<int>> sendMessageList);
 		void Results();
 		void outputGrid();
 		void updateWeather();
-		void Step(std::default_random_engine generator, int rnumber, double rnumber2, int rnumber3);
+		void Step(std::default_random_engine generator, int ep);
 		void InitHarvested();
 		
 		// Utils

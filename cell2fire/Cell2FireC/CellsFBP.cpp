@@ -272,7 +272,7 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
                                                           inputs * df_ptr, fuel_coefs * coef, 
 														  std::vector<std::vector<int>> & coordCells, std::unordered_map<int, CellsFBP> & Cells_Obj, 
 														  arguments * args, weatherDF * wdf_ptr, std::vector<double> * FSCell, std::vector<float>* crownMetrics,
-														  double randomROS) 
+														  double randomROS, std::vector<int> & crownState, std::vector<float> & crownFraction,std::vector<float> & surfFraction, std::vector<float> & Intensities, std::vector<float> & RateOfSpreads) 
 	{
 	// Special flag for repetition (False = -99 for the record)
 	int repeat = -99;
@@ -290,7 +290,7 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
 	// Compute main angle and ROSs: forward, flanks and back
     main_outs mainstruct, metrics;
     snd_outs sndstruct;
-    fire_struc headstruct, backstruct, flankstruct;
+    fire_struc headstruct, backstruct, flankstruct, metrics2;
 
 	// Calculate parameters
 	calculate(df_ptr, coef, &mainstruct, &sndstruct, &headstruct, &flankstruct, &backstruct);
@@ -342,7 +342,6 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
 		std::cout <<  "dist: " << headstruct.dist << std::endl;
 		std::cout <<  "rost: " << headstruct.rost << std::endl;
 		std::cout <<  "cfb: " << headstruct.cfb << std::endl;
-		std::cout <<  "fc: " << headstruct.fc << std::endl;
 		std::cout <<  "cfc: "<< headstruct.cfc << std::endl;
 		std::cout <<  "time: " << headstruct.time << std::endl;
 		std::cout <<  "rss: " << headstruct.rss << std::endl;
@@ -457,15 +456,18 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
 				FSCell->push_back(double(nb));
 				FSCell->push_back(double(period));
 				FSCell->push_back(ros);
-				determine_destiny_metrics(&df_ptr[int(nb) - 1], coef, &metrics);
-				crownMetrics->push_back(double(this->realId));
-				crownMetrics->push_back(double(nb));
-				crownMetrics->push_back(double(std::ceil(ros * 100.0) / 100.0));
-				crownMetrics->push_back(mainstruct.sfi);
-				crownMetrics->push_back(metrics.sfi);
-				crownMetrics->push_back(mainstruct.ftype);
-				crownMetrics->push_back(metrics.ftype);
-				crownMetrics->push_back(mainstruct.sfc);
+				determine_destiny_metrics(&df_ptr[int(nb) - 1], coef, &metrics, &metrics2);
+				crownState[this->realId]=mainstruct.ftype;
+				crownState[nb]=metrics.ftype;
+				RateOfSpreads[this->realId]=double(std::ceil(ros * 100.0) / 100.0);
+				RateOfSpreads[nb]=double(std::ceil(ros * 100.0) / 100.0);
+				Intensities[this->realId]=mainstruct.sfi;
+				Intensities[nb]=metrics.sfi;
+				crownFraction[this->realId]=headstruct.cfb;
+				crownFraction[nb]=metrics2.cfb;
+				surfFraction[this->realId]=mainstruct.sfc;
+				surfFraction[nb]=metrics.sfc;
+
                 // cannot mutate ROSangleDir during iteration.. we do it like 10 lines down
                // toPop.push_back(angle);
                 /*if (verbose) {
@@ -524,7 +526,7 @@ std::vector<int> CellsFBP::manageFireBBO(int period, std::unordered_set<int> & A
 																  inputs * df_ptr, fuel_coefs * coef, 
 																  std::vector<std::vector<int>> & coordCells, std::unordered_map<int, CellsFBP> & Cells_Obj, 
 																  arguments * args, weatherDF * wdf_ptr, std::vector<double> * FSCell, std::vector<float>* crownMetrics,
-																  double randomROS, std::vector<float> & EllipseFactors) 
+																  double randomROS, std::vector<float> & EllipseFactors,std::vector<int> & crownState, std::vector<float> & crownFraction,std::vector<float> & surfFraction, std::vector<float> & Intensities, std::vector<float> & RateOfSpreads)
 	{
 	// Special flag for repetition (False = -99 for the record)
 	int repeat = -99;
@@ -542,7 +544,7 @@ std::vector<int> CellsFBP::manageFireBBO(int period, std::unordered_set<int> & A
 	// Compute main angle and ROSs: forward, flanks and back
     main_outs mainstruct, metrics;
     snd_outs sndstruct;
-    fire_struc headstruct, backstruct, flankstruct;
+    fire_struc headstruct, backstruct, flankstruct, metrics2;
 
 	// Calculate parameters
 	calculate(df_ptr, coef, &mainstruct, &sndstruct, &headstruct, &flankstruct, &backstruct);
@@ -705,16 +707,17 @@ std::vector<int> CellsFBP::manageFireBBO(int period, std::unordered_set<int> & A
 				FSCell->push_back(double(nb));
 				FSCell->push_back(double(period));
 				FSCell->push_back(ros);
-				determine_destiny_metrics(&df_ptr[int(nb) - 1], coef, &metrics);
-				crownMetrics->push_back(double(this->realId));
-				crownMetrics->push_back(double(nb));
-				crownMetrics->push_back(double(ros));
-				crownMetrics->push_back(mainstruct.sfi);
-				crownMetrics->push_back(metrics.sfi);
-				crownMetrics->push_back(mainstruct.ftype);
-				crownMetrics->push_back(metrics.ftype);
-				crownMetrics->push_back(mainstruct.sfc);
-
+				determine_destiny_metrics(&df_ptr[int(nb) - 1], coef, &metrics, &metrics2);
+				crownState[this->realId]=mainstruct.ftype;
+				crownState[nb]=metrics.ftype;
+				RateOfSpreads[this->realId]=double(std::ceil(ros * 100.0) / 100.0);
+				RateOfSpreads[nb]=double(std::ceil(ros * 100.0) / 100.0);
+				Intensities[this->realId]=mainstruct.sfi;
+				Intensities[nb]=metrics.sfi;
+				crownFraction[this->realId]=headstruct.cfb;
+				crownFraction[nb]=metrics2.cfb;
+				surfFraction[this->realId]=mainstruct.sfc;
+				surfFraction[nb]=metrics.sfc;
                 // cannot mutate ROSangleDir during iteration.. we do it like 10 lines down
                // toPop.push_back(angle);
                 /*if (verbose) {
