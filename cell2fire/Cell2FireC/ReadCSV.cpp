@@ -273,7 +273,8 @@ void CSVReader::parsePROB(std::vector<float>& probabilities, std::vector<std::ve
 		if (DF[i][20].compare("") == 0) Prob = 1;
 		else Prob = std::stof(DF[i][20], &sz);
 		// Set values
-		probabilities.push_back(Prob);
+		//probabilities.push_back(Prob);
+		probabilites[i-1]=Prob;
 
 	}
 }
