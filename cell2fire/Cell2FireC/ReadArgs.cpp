@@ -24,132 +24,163 @@ bool cmdOptionExists(char** begin, char** end, const std::string& option)
     return std::find(begin, end, option) != end;
 }
 
-void parseArgs(int argc, char * argv[], arguments * args_ptr)
+void parseArgs(int argc, char* argv[], arguments* args_ptr)
 {
 	// Help
-    if(cmdOptionExists(argv, argv+argc, "-h")){
-        printf("-------------------------------------------\n         Help manual!!! \n-------------------------------------------\n");
-    }
-	
+	if (cmdOptionExists(argv, argv + argc, "-h")) {
+		printf("-------------------------------------------\n         Help manual!!! \n-------------------------------------------\n");
+	}
+
 	// Empty default
 	char empty = '\0';
-	
+
 	// Strings
 	//--input-instance-folder
-	char * input_folder = getCmdOption(argv, argv + argc, "--input-instance-folder");
-    if (input_folder){
-        printf("InFolder: %s \n", input_folder);
-    }
+	char* input_folder = getCmdOption(argv, argv + argc, "--input-instance-folder");
+	if (input_folder) {
+		printf("InFolder: %s \n", input_folder);
+	}
 	else input_folder = &empty;
-	
+
 	//--output-folder
-	char * output_folder = getCmdOption(argv, argv + argc, "--output-folder");
-    if (output_folder){
-        printf("OutFolder: %s \n", output_folder );
-    }
+	char* output_folder = getCmdOption(argv, argv + argc, "--output-folder");
+	if (output_folder) {
+		printf("OutFolder: %s \n", output_folder);
+	}
 	else output_folder = &empty;
-	
+
 	//--weather
-	char * input_weather = getCmdOption(argv, argv + argc, "--weather");
-    if (input_weather){
-        printf("WeatherOpt: %s \n", input_weather);
-    }
+	char* input_weather = getCmdOption(argv, argv + argc, "--weather");
+	if (input_weather) {
+		printf("WeatherOpt: %s \n", input_weather);
+	}
 	else input_weather = &empty;
-	
+
 	//--HarvestPlan
-	char * input_hplan = getCmdOption(argv, argv + argc, "--HarvestPlan");
-    if (input_hplan){
-        printf("HarvestPlan: %s \n", input_hplan);
-    }
+	char* input_hplan = getCmdOption(argv, argv + argc, "--HarvestPlan");
+	if (input_hplan) {
+		printf("HarvestPlan: %s \n", input_hplan);
+	}
 	else input_hplan = &empty;
-		
+
 	// Booleans
 	bool out_messages = false;
-	bool out_fire_behavior = false;
 	bool out_trajectories = false;
-	bool no_output = false; 
+	bool no_output = false;
 	bool verbose_input = false;
 	bool input_ignitions = false;
 	bool out_grids = false;
+	bool out_fl=false;
+	bool out_intensity=false;
+	bool out_ros=false;
+	bool out_crown = false;
+	bool out_crown_consumption=false;
+	bool out_surface_consumption=false;
 	bool out_finalgrid = false;
 	bool prom_tuned = false;
-	bool out_stats = false;	
+	bool out_stats = false;
 	bool bbo_tuning = false;
-	
+
+
 	//--out-messages
-    if(cmdOptionExists(argv, argv+argc, "--output-messages")){
-        out_messages = true;
-        printf("OutMessages: %d \n", out_messages);
-    }
-	
-	//--fire-behavior
-	if (cmdOptionExists(argv, argv + argc, "--out-behavior")) {
-		out_fire_behavior = true;
-		printf("OutMessages: %d \n", out_fire_behavior);
+	if (cmdOptionExists(argv, argv + argc, "--output-messages")) {
+		out_messages = true;
+		printf("OutMessages: %d \n", out_messages);
 	}
 
-	//--trajectories
-    if(cmdOptionExists(argv, argv+argc, "--trajectories")){
-        out_trajectories = true;
-        printf("Trajectories: %d \n", out_trajectories);
-    }
+	//--fire-behavior
+	if (cmdOptionExists(argv, argv + argc, "--out-fl")) {
+		out_fl = true;
+		printf("OutFlameLength: %d \n", out_fl);
+	}
+		//--fire-behavior
+	if (cmdOptionExists(argv, argv + argc, "--out-intensity")) {
+		out_intensity = true;
+		printf("OutIntensity: %d \n", out_intensity);
+	}
+		//--fire-behavior
+	if (cmdOptionExists(argv, argv + argc, "--out-ros")) {
+		out_ros = true;
+		printf("OutROS: %d \n", out_ros);
+	}
+			//--fire-behavior
+	if (cmdOptionExists(argv, argv + argc, "--out-crown")) {
+		out_crown = true;
+		printf("OutCrown: %d \n", out_crown);
+	}
 	
+	if (cmdOptionExists(argv, argv + argc, "--out-cfb")) {
+		out_crown_consumption = true;
+		printf("OutCrownConsumption: %d \n", out_crown_consumption);
+	}
+		if (cmdOptionExists(argv, argv + argc, "--out-sfc")) {
+		out_crown_consumption = true;
+		printf("OutCrownConsumption: %d \n", out_surface_consumption);
+	}
+	
+
+	//--trajectories
+	if (cmdOptionExists(argv, argv + argc, "--trajectories")) {
+		out_trajectories = true;
+		printf("Trajectories: %d \n", out_trajectories);
+	}
+
 	//--no-output
-	if(cmdOptionExists(argv, argv+argc, "--no-output")){
+	if (cmdOptionExists(argv, argv + argc, "--no-output")) {
 		no_output = true;
 		printf("noOutput: %d \n", no_output);
-    }
-	
+	}
+
 	//--verbose
-	if(cmdOptionExists(argv, argv+argc, "--verbose")){
-        verbose_input = true;
+	if (cmdOptionExists(argv, argv + argc, "--verbose")) {
+		verbose_input = true;
 		printf("verbose: %d \n", verbose_input);
-    }
-	
+	}
+
 	//--ignitions
-	if(cmdOptionExists(argv, argv+argc, "--ignitions")){
-        input_ignitions = true;
-        printf("Ignitions: %d \n", input_ignitions);
-    }
-	
+	if (cmdOptionExists(argv, argv + argc, "--ignitions")) {
+		input_ignitions = true;
+		printf("Ignitions: %d \n", input_ignitions);
+	}
+
 	//--grids
-	if(cmdOptionExists(argv, argv+argc, "--grids")){
+	if (cmdOptionExists(argv, argv + argc, "--grids")) {
 		out_grids = true;
 		printf("OutputGrids: %d \n", out_grids);
-    }
-	
+	}
+
 	//--final-grid
-	if(cmdOptionExists(argv, argv+argc, "--final-grid")){
+	if (cmdOptionExists(argv, argv + argc, "--final-grid")) {
 		out_finalgrid = true;
 		printf("FinalGrid: %d \n", out_finalgrid);
-    }
-	
-	//--Prom_tuned
-	if(cmdOptionExists(argv, argv+argc, "--PromTuned")){
-        prom_tuned = true;
-		printf("PromTuned: %d \n", prom_tuned);
-    }
-	
-	//--statistics
-	if(cmdOptionExists(argv, argv+argc, "--statistics")){
-        out_stats = true;
-		printf("Statistics: %d \n", out_stats);
-    }
-	
-	//--bbo
-	if(cmdOptionExists(argv, argv+argc, "--bbo")){
-        bbo_tuning = true;
-		printf("BBOTuning: %d \n", out_stats);
-    }
+	}
 
-	
+	//--Prom_tuned
+	if (cmdOptionExists(argv, argv + argc, "--PromTuned")) {
+		prom_tuned = true;
+		printf("PromTuned: %d \n", prom_tuned);
+	}
+
+	//--statistics
+	if (cmdOptionExists(argv, argv + argc, "--statistics")) {
+		out_stats = true;
+		printf("Statistics: %d \n", out_stats);
+	}
+
+	//--bbo
+	if (cmdOptionExists(argv, argv + argc, "--bbo")) {
+		bbo_tuning = true;
+		printf("BBOTuning: %d \n", out_stats);
+	}
+
+
 	// Floats and ints
 	// defaults
 	int dsim_years = 1;
 	int dnsims = 1;
-	int dweather_period_len= 60;
+	int dweather_period_len = 60;
 	int dweather_files = 1;
-	int dmax_fire_periods= 10000000;
+	int dmax_fire_periods = 10000000;
 	int dseed = 123;
 	int dnthreads = 1;
 	int diradius = 0;
@@ -288,15 +319,15 @@ void parseArgs(int argc, char * argv[], arguments * args_ptr)
 		args_ptr->seed = std::stoi (seed ,&sz); 
     }
 	else args_ptr->seed = dseed;
-
-	//--nthreads  (int)
-	char * nthreads = getCmdOption(argv, argv + argc, "--nthreads");
-    if (nthreads){
-        printf("nthreads: %s \n", nthreads);
-		args_ptr->nthreads = std::stoi (nthreads ,&sz); 
-    }
-	else args_ptr->nthreads = dnthreads;
 	
+	//--nthreads  (int)
+	char* nthreads = getCmdOption(argv, argv + argc, "--nthreads");
+	if (nthreads) {
+		printf("nthreads: %s \n", nthreads);
+		args_ptr->nthreads = std::stoi(nthreads, &sz);
+	}
+	else args_ptr->nthreads = dnthreads;
+
 	// Populate structure
 	// Strings 
 	if (input_folder == &empty){
@@ -328,7 +359,12 @@ void parseArgs(int argc, char * argv[], arguments * args_ptr)
 		
 	// booleans
 	args_ptr->OutMessages = out_messages;
-	args_ptr->OutFireBehavior = out_fire_behavior;
+	args_ptr->OutFl = out_fl;
+	args_ptr->OutIntensity = out_intensity;
+	args_ptr->OutRos = out_ros;
+	args_ptr->OutCrown = out_crown;
+	args_ptr->OutCrownConsumption = out_crown_consumption;
+	args_ptr->OutSurfConsumption = out_surface_consumption;
 	args_ptr->Trajectories = out_trajectories; 
 	args_ptr->NoOutput = no_output;
 	args_ptr->verbose = verbose_input; 
@@ -337,7 +373,7 @@ void parseArgs(int argc, char * argv[], arguments * args_ptr)
 	args_ptr->FinalGrid = out_finalgrid;
 	args_ptr->PromTuned = prom_tuned;
 	args_ptr->Stats = out_stats;   
-	args_ptr->BBOTuning = bbo_tuning;   
+	args_ptr->BBOTuning = bbo_tuning;
 	
 }
 
@@ -350,7 +386,12 @@ void printArgs(arguments args){
 	std::cout << "MinutesPerWP: " << args.MinutesPerWP << std::endl; 
 	std::cout << "MaxFirePeriods: " << args.MaxFirePeriods << std::endl; 
 	std::cout << "Messages: " << args.OutMessages << std::endl;
-	std::cout << "FireBehavior: " << args.OutFireBehavior << std::endl;
+	std::cout << "OutFlameLength: " << args.OutFl << std::endl;
+	std::cout << "OutIntensity: " << args.OutIntensity << std::endl;
+	std::cout << "OutROS: " << args.OutRos << std::endl;
+	std::cout << "OutCrown: " << args.OutCrown << std::endl;
+	std::cout << "OutCrownConsumption: " << args.OutCrownConsumption << std::endl;
+	std::cout << "OutSurfaceConsumption: " << args.OutSurfConsumption << std::endl;
 	std::cout << "HarvestPlan: " << args.HarvestPlan << std::endl; 
 	std::cout << "TotalYears: " << args.TotalYears << std::endl; 
 	std::cout << "TotalSims: " << args.TotalSims << std::endl; 
@@ -365,8 +406,8 @@ void printArgs(arguments args){
 	std::cout << "noOutput: " << args.NoOutput << std::endl; 
 	std::cout << "verbose: " << args.verbose << std::endl; 
 	std::cout << "seed: " << args.seed << std::endl; 
-	std::cout << "nthreads: " << args.nthreads << std::endl; 
-	
+	std::cout << "nthreads: " << args.nthreads << std::endl;
+
 	
 	
 }

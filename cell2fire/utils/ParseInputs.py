@@ -160,7 +160,7 @@ def make_parser():
     
     # Booleans
     parser.add_argument("--weather",
-                        help="The 'type' of weather: constant, random, rows (default rows)",
+                        help="The 'type' of weather: constant, distribution, random, rows (default rows)",
                         dest="WeatherOpt",
                         type=str,
                         default="rows")
@@ -219,11 +219,36 @@ def make_parser():
                         dest="OutMessages",
                         default=False,
                         action='store_true')
-    parser.add_argument("--out-behavior",
-                        help="Generate .asc files with fire behavior metrics (crown, hit ROS, Intensity)",
-                        dest="OutBehavior",
+    parser.add_argument("--out-fl",
+                        help="Generates ASCII files with Flame Length",
+                        dest="OutFl",
                         default=False,
-                        action="store_true")                    
+                        action='store_true')
+    parser.add_argument("--out-intensity",
+                        help="Generates ASCII files with Byram Intensity",
+                        dest="OutIntensity",
+                        default=False,
+                        action='store_true')
+    parser.add_argument("--out-ros",
+                        help="Generates ASCII files with hit ROS",
+                        dest="OutRos",
+                        default=False,
+                        action='store_true')
+    parser.add_argument("--out-crown",
+                        help="Generates ASCII files with Boolean for Crown Fire if correspondes",
+                        dest="OutCrown",
+                        default=False,
+                        action='store_true') 
+    parser.add_argument("--out-cfb",
+                        help="Generates ASCII files with Crown Fire Fuel Consumption if correspondes",
+                        dest="OutCrownConsumption",
+                        default=False,
+                        action='store_true')  
+    parser.add_argument("--out-sfc",
+                        help="Generates ASCII files with Crown Fire Fuel Consumption if correspondes",
+                        dest="OutSurfConsumption",
+                        default=False,
+                        action='store_true')                                                                        
     parser.add_argument("--Prometheus-tuned",
                         help="Activates the predefined tuning parameters based on Prometheus",
                         dest="PromTuning",
@@ -271,13 +296,12 @@ def make_parser():
                         action="store_true")
     
     
-    
     # Floats
     parser.add_argument("--Fire-Period-Length",
-                        help="Fire Period length in minutes (needed for ROS computations). Default 60",
+                        help="Fire Period length in minutes (needed for ROS computations). Default 1.0",
                         dest="input_PeriodLen",
                         type=float,
-                        default=60)                    
+                        default=1.0)                    
     parser.add_argument("--Weather-Period-Length",
                         help="Weather Period length in minutes (needed weather update). Default 60",
                         dest="weather_period_len",

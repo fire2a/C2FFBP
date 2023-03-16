@@ -67,7 +67,7 @@ void CSVReader::printData(std::vector<std::vector<std::string>> & DF){
 
 
 /*
-* Populates the df input objects based on the DF csv file for each row/cell
+* Populates the df input objects based on the DF csv file for each row/cell (spanish version)
 */
 void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells){
 	int i;
@@ -105,7 +105,7 @@ void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> &
 		
 		if (DF[i][14].compare("") == 0) pc = 0;
 		else pc = std::stoi (DF[i][14] ,&sz);
-		
+			
 		if (DF[i][15].compare("") == 0) pdf = 0;
 		else pdf = std::stoi (DF[i][15] ,&sz);
 		
@@ -140,7 +140,7 @@ void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> &
 		else pattern = 1;// std::stoi (DF[i][18], &sz);
 		
 		
-			
+		
 		// Set values
 		strncpy(df_ptr->fueltype, faux, 4);
 		df_ptr->mon=mon; df_ptr->jd=jd; /*df_ptr->m=DF[i][3];*/ df_ptr->jd_min=jd_min;
@@ -157,7 +157,7 @@ void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> &
 
 
 /*
-* Populates vector of size NCells with type number based on lookup table 
+* Populates vector of size NCells with type number based on lookup table (Spain version)
 */
 void CSVReader::parseNDF(std::vector<int> &NFTypes, std::vector<std::vector<std::string>> & DF, int NCells){
 	int i;
@@ -184,6 +184,32 @@ void CSVReader::parseNDF(std::vector<int> &NFTypes, std::vector<std::vector<std:
 
 
 /*
+* Populates vector of size NCells with type number based on lookup table (Spain version)
+*/
+void CSVReader::parsePROB(std::vector<float>& probabilities, std::vector<std::vector<std::string>>& DF, int NCells) {
+	int i;
+
+	// Ints 
+	float Prob;
+
+	// CChar
+	const char* faux;
+	std::string::size_type sz;   // alias of size_t
+
+	// Loop over cells (populating per row)
+	for (i = 1; i <= NCells; i++) {
+		//printf("Populating DF for cell %d\n", i);
+		if (DF[i][20].compare("") == 0) Prob = 1;
+		else Prob = std::stof(DF[i][20], &sz);
+		// Set values
+		//probabilities.push_back(Prob);
+		probabilites[i-1]=Prob;
+
+	}
+}
+
+
+/*
 * Populate Weather DF
 */
 void CSVReader::parseWeatherDF(weatherDF * wdf_ptr, std::vector<std::vector<std::string>> & DF, int WPeriods){
@@ -204,7 +230,6 @@ void CSVReader::parseWeatherDF(weatherDF * wdf_ptr, std::vector<std::vector<std:
 		//printf("Populating Weather DF period %d\n", i);
 		scenario = DF[i][0];
 		
-		scenario = DF[i][0];
 		datetime = DF[i][1];
 		
 		if (DF[i][6].compare("") == 0) waz = 0;
@@ -257,27 +282,6 @@ void CSVReader::parseWeatherDF(weatherDF * wdf_ptr, std::vector<std::vector<std:
 	
 }
 
-void CSVReader::parsePROB(std::vector<float>& probabilities, std::vector<std::vector<std::string>>& DF, int NCells) {
-	int i;
-
-	// Ints 
-	float Prob;
-
-	// CChar
-	const char* faux;
-	std::string::size_type sz;   // alias of size_t
-
-	// Loop over cells (populating per row)
-	for (i = 1; i <= NCells; i++) {
-		//printf("Populating DF for cell %d\n", i);
-		if (DF[i][20].compare("") == 0) Prob = 1;
-		else Prob = std::stof(DF[i][20], &sz);
-		// Set values
-		//probabilities.push_back(Prob);
-		probabilites[i-1]=Prob;
-
-	}
-}
 
 
 /*
@@ -362,18 +366,23 @@ void CSVReader::parseBBODF(std::unordered_map<int, std::vector<float>> & bbo, st
 	
 }
 
+
 void CSVReader::parseForestDF(forestDF * frt_ptr, std::vector<std::vector<std::string>> & DF){
 	// Ints 
 	int cellside, rows, cols;
 	int i, j;
 	double xllcorner, yllcorner;
+	//std::string xllcorner;
+	std::string::size_type sz;   // alias of size_t
+	std::unordered_map<std::string, int> Aux;
+	std::vector<int> Aux2;
+
+	cols = std::stoi(DF[0][1], &sz);
+	rows = std::stoi(DF[1][1], &sz);
 
 	// Others 
 	std::vector<std::unordered_map<std::string, int>> adjCells;
- 	std::string::size_type sz;   // alias of size_t
 	std::vector<std::vector<int>> coordCells;
-	std::unordered_map<std::string, int> Aux;
-	std::vector<int> Aux2;
 	
 	std::string North = "N";
     std::string South = "S";
@@ -387,11 +396,10 @@ void CSVReader::parseForestDF(forestDF * frt_ptr, std::vector<std::vector<std::s
 	// Filling DF
 	//DEBUGprintf("Populating Forest DF\n");
 	
-	cols = std::stoi (DF[0][1], &sz);
-	rows = std::stoi (DF[1][1], &sz);
-	cellside = std::stoi (DF[4][1], &sz);
 	xllcorner = std::stod(DF[2][1], &sz);
 	yllcorner = std::stod(DF[3][1], &sz);
+	cellside = std::stoi(DF[4][1], &sz);
+	
 	//DEBUGprintf("cols: %d,  rows:  %d,   cellside:  %d\n", cols, rows, cellside);
 	
 	// CoordCells and Adjacents
@@ -473,7 +481,7 @@ void CSVReader::parseForestDF(forestDF * frt_ptr, std::vector<std::vector<std::s
 						adjCells.push_back(Aux);
                         n++;    
 					}
-                    if (c>0 and c<cols-1){    
+                    if (c>0 && c<cols-1){    
                         Aux = {{North,n-cols}, {NorthEast, n-cols+1}, {NorthWest,n-cols-1}, {South,-1}, 
 									{SouthEast,-1} , {SouthWest,-1}, {East,n+1}, {West,n-1}};
 						adjCells.push_back(Aux);
@@ -527,11 +535,11 @@ void CSVReader::parseForestDF(forestDF * frt_ptr, std::vector<std::vector<std::s
 	frt_ptr->cols = cols;
 	frt_ptr->coordCells = coordCells;
 	frt_ptr->adjCells = adjCells;
-		
+	frt_ptr->xllcorner = xllcorner;
+	frt_ptr->yllcorner = yllcorner;
 		
 	
 }
-
 
 
 void CSVReader::printDF(inputs df){
@@ -553,14 +561,15 @@ void CSVReader::printWeatherDF(weatherDF wdf){
 }
 
 /*
-int main() {
+int main()
+{
 	// Creating an object of CSVWriter
-	CSVReader reader("/home/kotaro/workspace/Cell2Fire/Cell2Fire/data/Harvest40x40/Weathers/Weather947.csv");
+	CSVReader reader("example.csv");
  
 	// Get the data from CSV File
-  std::vector<std::vector<std::string> > dataList = reader.getData();
-
- 	// Print the content of row by row on screen
+	std::vector<std::vector<std::string> > dataList = reader.getData();
+ 
+	// Print the content of row by row on screen
 	for(std::vector<std::string> vec : dataList)
 	{
 		for(std::string data : vec)
@@ -570,5 +579,6 @@ int main() {
 		std::cout<<std::endl;
 	}
 	return 0;
+ 
 }
 */

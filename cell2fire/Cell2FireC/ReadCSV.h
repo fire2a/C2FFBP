@@ -28,7 +28,7 @@ typedef struct
 */
 typedef struct
    { int cellside, rows, cols;
-   	  double xllcorner, yllcorner;
+	double xllcorner, yllcorner;
       std::vector<std::unordered_map<std::string, int>> adjCells;
 	  std::vector<std::vector<int>> coordCells;
    } forestDF;
@@ -54,10 +54,13 @@ public:
 	
 	//Populate DF 
 	void parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells);
-	
-	// Populate NFtypes
+		
+	// Populate NFtypes (Spanish version)
 	void parseNDF(std::vector<int> & NFTypes, std::vector<std::vector<std::string>> & DF, int NCells);
 	
+	// Populate Probabilities
+	void parsePROB(std::vector<float>& probabilities, std::vector<std::vector<std::string>>& DF, int NCells);
+
 	//Populate Weather DF
 	void parseWeatherDF(weatherDF * wt_ptr, std::vector<std::vector<std::string>> & DF, int WPeriods);
 	
@@ -67,8 +70,6 @@ public:
 	// Populates ForestDF
 	void parseForestDF(forestDF * frt_ptr, std::vector<std::vector<std::string>> & DF);
 	
-	//Populate Probability Ignition
-	void parsePROB(std::vector<float>& probabilities, std::vector<std::vector<std::string>>& DF, int NCells);
 	// Populate Harvested Cells 
 	void parseHarvestedDF(std::unordered_map<int, std::vector<int>> & hc, std::vector<std::vector<std::string>> & DF, int HPeriods);
 	

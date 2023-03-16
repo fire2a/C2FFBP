@@ -71,33 +71,6 @@ void CSVWriter::printCSV(int rows, int cols, std::vector<int> statusCells)
 	
 }
 
-void CSVWriter::printCSV_V2(int rows, int cols, std::vector<int> statusCells)
-{
-	std::ofstream ofs(this->fileName, std::ofstream::out);
-	std::string toOut;
-	int r,c,i;
-	
-	for (r = 0; r < rows; r++)
-	{
-		for (c = 0; c < cols; c++)
-		{
-			std::string toOut;
-			for (i = 0; i < cols; i ++){
-				if (i == cols - 1){
-					toOut += std::to_string(statusCells[c+r*cols + i]);
-				}
-				else{
-					toOut += std::to_string(statusCells[c+r*cols + i])  + this->delimeter;
-				}
-			}
-			ofs << toOut << "\n";
-			c+=cols;
-		}
-	}
-	// Close file 
-	ofs.close();
-}
-
 
 /*
 *     Creates CSVDouble
@@ -109,11 +82,18 @@ void CSVWriter::printCSVDouble(int rows, int cols, std::vector<double> network)
  
 	// Adding vector to CSV File
 	int r, c;
+	bool out;
+	out = false;
 	
 	// Printing rows (output)
 	for (r=0; r < rows; r++){
+		
 		for (c=0; c < cols; c++){
-			
+			if (network[c+r*cols] < 1 || std::ceil(network[c+r*cols]) != network[c+r*cols]){
+				out = true;
+				break;
+			}
+		
 			std::vector<double>::const_iterator first = network.begin() + c+r*cols;
 			std::vector<double>::const_iterator last = network.begin() + c+r*cols +cols;
 			std::vector<double> rowVector(first, last);
@@ -121,12 +101,18 @@ void CSVWriter::printCSVDouble(int rows, int cols, std::vector<double> network)
 			this->addDatainRow(rowVector.begin(), rowVector.end());
 			c+=cols;
 		}
+		
+		if (out) {
+			break;
+		}
 	}
 	
 }
 
+
+
 // Ofstream version to save faster
-void CSVWriter::printCSVDouble_V2(int rows, int cols, std::vector<double> network){
+void CSVWriter::printCSVDouble_V2(int rows, int cols, std::vector<double> network) {
 
 	bool outs = false;
 	std::ofstream ofs(this->fileName, std::ofstream::out);
@@ -135,64 +121,24 @@ void CSVWriter::printCSVDouble_V2(int rows, int cols, std::vector<double> networ
 	{
 		for (int c = 0; c < cols; c++)
 		{
-			if (network[c+r*cols] < 1 || network[c+r*cols + 1] < 1 || std::ceil(network[c+r*cols]) != network[c+r*cols]){
+			if (network[c + r * cols] < 1 || network[c + r * cols + 1] < 1 || std::ceil(network[c + r * cols]) != network[c + r * cols]) {
 				outs = true;
 				break;
 			}
 
-			ofs << (int)network[c+r*cols]  << this->delimeter << (int)network[c+r*cols + 1]  << this->delimeter << (int)network[c+r*cols + 2]  << this->delimeter << network[c+r*cols + 3]  << "\n";
-			c+=cols;
-
+			ofs << (int)network[c + r * cols] << this->delimeter << (int)network[c + r * cols + 1] << this->delimeter << (int)network[c + r * cols + 2] << this->delimeter << network[c + r * cols + 3] << "\n";
+			c += cols;
 		}
-		
+
 		if (outs) {
 			break;
 		}
 	}
 	// Close file 
 	ofs.close();
-	
+
 }
 
-
-void CSVWriter::asciiHeader(int rows, int cols, double xllcorner, double yllcorner, int cellside) {
-	std::fstream file;
-	// Open the file in truncate mode if first line else in Append Mode
-	file.open(this->fileName, std::ios::out | (this->linesCount ? std::ios::app : std::ios::trunc));
-	//first line: coles
-	file << "ncols";
-	file << this->delimeter;
-	file << cols;
-	file << "\n";
-	//second line: rows
-	file << "nrows";
-	file << this->delimeter;
-	file << rows;
-	file << "\n";
-	//third line: xllcorner
-	file << "xllcorner";
-	file << this->delimeter;
-	file << xllcorner;
-	file << "\n";
-	//fourth line: yllcorner
-	file << "yllcorner";
-	file << this->delimeter;
-	file << yllcorner;
-	file << "\n";
-	//cellsize
-	file << "cellsize";
-	file << this->delimeter;
-	file << cellside;
-	file << "\n";
-	//NODATA_value
-	file << "NODATA_value";
-	file << this->delimeter;
-	file << -9999;
-	file << "\n";
-	this->linesCount++;
-	// Close the file
-	file.close();
-}
 
 
 void CSVWriter::printASCII(int rows, int cols, double xllcorner, double yllcorner, int cellside, std::vector<float> statusCells)
@@ -256,6 +202,28 @@ void CSVWriter::printWeather(std::vector<std::string> weatherHistory)
 	for (i = 0; i < weatherHistory.size(); i++)
 	{
 		ofs << weatherHistory[i] << "\n";
+	}
+	// Close file 
+	ofs.close();
+}
+
+void CSVWriter::printCSV_V2(int rows, int cols, std::vector<int> statusCells)
+{
+	std::ofstream ofs(this->fileName, std::ofstream::out);
+	std::string toOut;
+	int r,c,i;
+	
+	for (r = 0; r < rows; r++)
+	{
+		for (c = 0; c < cols; c++)
+		{
+			std::string toOut;
+			for (i = 0; i < cols; i ++){
+					toOut += std::to_string(statusCells[c+r*cols + i])  + this->delimeter;
+			}
+			ofs << toOut << "\n";
+			c+=cols;
+		}
 	}
 	// Close file 
 	ofs.close();
