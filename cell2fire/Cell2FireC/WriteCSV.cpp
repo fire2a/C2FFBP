@@ -71,6 +71,45 @@ void CSVWriter::printCSV(int rows, int cols, std::vector<int> statusCells)
 	
 }
 
+void CSVWriter::asciiHeader(int rows, int cols, double xllcorner, double yllcorner, int cellside) {
+	std::fstream file;
+	// Open the file in truncate mode if first line else in Append Mode
+	file.open(this->fileName, std::ios::out | (this->linesCount ? std::ios::app : std::ios::trunc));
+	//first line: coles
+	file << "ncols";
+	file << this->delimeter;
+	file << cols;
+	file << "\n";
+	//second line: rows
+	file << "nrows";
+	file << this->delimeter;
+	file << rows;
+	file << "\n";
+	//third line: xllcorner
+	file << "xllcorner";
+	file << this->delimeter;
+	file << xllcorner;
+	file << "\n";
+	//fourth line: yllcorner
+	file << "yllcorner";
+	file << this->delimeter;
+	file << yllcorner;
+	file << "\n";
+	//cellsize
+	file << "cellsize";
+	file << this->delimeter;
+	file << cellside;
+	file << "\n";
+	//NODATA_value
+	file << "NODATA_value";
+	file << this->delimeter;
+	file << -9999;
+	file << "\n";
+	this->linesCount++;
+	// Close the file
+	file.close();
+}
+
 
 /*
 *     Creates CSVDouble

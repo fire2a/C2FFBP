@@ -162,7 +162,7 @@ Originally  Written at P.N.F.I.  December 91, by Mike Wotton
    }
 
 
-void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics) {
+void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics,fire_struc* metrics2) {
     int firetype=0;
     fuel_coefs **ptr=&pt;
     zero_main(metrics);
@@ -185,6 +185,9 @@ void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics)
        metrics->rso=critical_ros(data->fueltype,metrics->sfc,metrics->csi);
        firetype=fire_type(metrics->csi,metrics->sfi);
        metrics->ftype=firetype;
+       if(firetype==1){
+        metrics2->cfb=crown_frac_burn(metrics->rss,metrics->rso);
+       }
        }
     }
 }

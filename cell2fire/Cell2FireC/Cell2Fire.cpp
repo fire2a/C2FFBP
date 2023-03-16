@@ -516,14 +516,14 @@ void Cell2Fire::reset(int rnumber, double rnumber2, int simExt = 1){
 		this->messagesFolder = this->args.OutFolder + "/FlameLength/";
 	}
 	//Crown Folder
-	if (this->args.OutCrown && this->args.AllowCROS) {
+	if (this->args.OutCrown) {
 		CSVWriter CSVFolder("", "");
 		this->messagesFolder = "mkdir -p " + this->args.OutFolder + "/CrownFire/";
 		CSVFolder.MakeDir(this->messagesFolder);
 		this->messagesFolder = this->args.OutFolder + "/CrownFire/";
 	}
 		//Crown Fraction Burn Folder
-	if (this->args.OutCrownConsumption && this->args.AllowCROS) {
+	if (this->args.OutCrownConsumption) {
 		CSVWriter CSVFolder("", "");
 		this->messagesFolder = "mkdir -p " + this->args.OutFolder + "/CrownFractionBurn/";
 		CSVFolder.MakeDir(this->messagesFolder);
@@ -537,7 +537,12 @@ void Cell2Fire::reset(int rnumber, double rnumber2, int simExt = 1){
 		CSVFolder.MakeDir(this->messagesFolder);
 		this->messagesFolder = this->args.OutFolder + "/SurfFuelConsumption/";
 	}
-	if
+	if (this->args.OutFl) {
+		CSVWriter CSVFolder("", "");
+		this->messagesFolder = "mkdir -p " + this->args.OutFolder + "/FlameLength/";
+		CSVFolder.MakeDir(this->messagesFolder);
+		this->messagesFolder = this->args.OutFolder + "/FlameLength/";
+	}
 		
 	// Random Weather 
 	/*std::cout << "Weather Option:" << this->args.WeatherOpt << std::endl;
@@ -1394,7 +1399,7 @@ void Cell2Fire::Results(){
 
 	
 		// Intensity
-	if ((this->args.OutCrownConsumption) && (this->args.AllowCROS)) {
+	if ((this->args.OutCrownConsumption)) {
 		this->rosFolder = this->args.OutFolder + "/CrownFractionBurn/";
 		std::string rosName;
 		if (this->sim < 10) {
@@ -1414,7 +1419,7 @@ void Cell2Fire::Results(){
 
 
 	// Crown
-	if ((this->args.OutCrown) && (this->args.AllowCROS)) {
+	if ((this->args.OutCrown) ) {
 		this->rosFolder = this->args.OutFolder + "/CrownFire/";
 		std::string rosName;
 		if (this->sim < 10) {

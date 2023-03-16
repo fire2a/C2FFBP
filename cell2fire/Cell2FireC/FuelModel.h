@@ -124,7 +124,7 @@ void set_all(fire_struc *ptr, int time);
 
 void calculate(inputs *data,fuel_coefs *ptr,main_outs *at,
       snd_outs *sec,fire_struc *hptr,fire_struc *fptr,fire_struc *bptr);
-void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics);
+void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics,fire_struc* metrics2);
 void zero_main(main_outs *m);
 
 void zero_sec (snd_outs *s);

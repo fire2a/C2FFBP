@@ -468,7 +468,7 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
 				surfFraction[this->realId]=mainstruct.sfc;
 				surfFraction[nb]=metrics.sfc;
 		    	FlameLengths[this->realId]=headstruct.dist ;
-			    FlameLengths[nb]=headstruct.dist 
+			    FlameLengths[nb]=headstruct.dist;
 
                 // cannot mutate ROSangleDir during iteration.. we do it like 10 lines down
                // toPop.push_back(angle);
