@@ -63,6 +63,13 @@ void parseArgs(int argc, char* argv[], arguments* args_ptr)
 	}
 	else input_hplan = &empty;
 
+	//--HarvestPlan
+	char* input_cbhplan = getCmdOption(argv, argv + argc, "--CBHPlan");
+	if (input_cbhplan) {
+		printf("CBHPlan: %s \n", input_cbhplan);
+	}
+	else input_cbhplan = &empty;
+
 	// Booleans
 	bool out_messages = false;
 	bool out_trajectories = false;
@@ -357,6 +364,11 @@ void parseArgs(int argc, char* argv[], arguments* args_ptr)
 	}
 	else args_ptr->HarvestPlan = input_hplan; 
 		
+	if (input_cbhplan == &empty){
+		args_ptr->CBHPlan = ""; 
+	}
+	else args_ptr->CBHPlan = input_cbhplan; 
+		
 	// booleans
 	args_ptr->OutMessages = out_messages;
 	args_ptr->OutFl = out_fl;
@@ -393,6 +405,7 @@ void printArgs(arguments args){
 	std::cout << "OutCrownConsumption: " << args.OutCrownConsumption << std::endl;
 	std::cout << "OutSurfaceConsumption: " << args.OutSurfConsumption << std::endl;
 	std::cout << "HarvestPlan: " << args.HarvestPlan << std::endl; 
+	std::cout << "CBHPlan: " << args.CBHPlan << std::endl; 
 	std::cout << "TotalYears: " << args.TotalYears << std::endl; 
 	std::cout << "TotalSims: " << args.TotalSims << std::endl; 
 	std::cout << "FirePeriodLen: " << args.FirePeriodLen << std::endl; 

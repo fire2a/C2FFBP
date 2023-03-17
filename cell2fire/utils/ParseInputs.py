@@ -93,6 +93,11 @@ def make_parser():
                         dest="HCells",
                         type=str,
                         default=None)
+    parser.add_argument("--CBHCells",
+                        help="File with new CBH of each respective cell (first column are the cells, second the new cbh)",
+                        dest="CBHCells",
+                        type=str,
+                        default=None)
     parser.add_argument("--msgheur",
                         help="Path to messages needed for Heuristics",
                         dest="msgHeur",

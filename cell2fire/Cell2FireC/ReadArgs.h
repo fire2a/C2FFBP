@@ -14,7 +14,7 @@
 *   Args structure
 */
 typedef struct{ 
-	std::string InFolder, OutFolder, WeatherOpt, HarvestPlan;
+	std::string InFolder, OutFolder, WeatherOpt, HarvestPlan, CBHPlan;
 	bool OutMessages, OutFl,OutIntensity,OutRos,OutCrown,OutCrownConsumption,OutSurfConsumption, Trajectories, NoOutput, verbose, Ignitions, OutputGrids, FinalGrid, PromTuned, Stats, BBOTuning;
 	float ROSCV, ROSThreshold, HFIThreshold, HFactor, FFactor, BFactor, EFactor, FirePeriodLen;
 	int MinutesPerWP, MaxFirePeriods, TotalYears, TotalSims, NWeatherFiles, IgnitionRadius, seed, nthreads;
