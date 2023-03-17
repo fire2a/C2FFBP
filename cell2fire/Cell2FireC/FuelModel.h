@@ -15,7 +15,7 @@
 
  typedef struct
    { char fueltype[4];
-     float ffmc,ws,gfl,bui,lat,lon;
+     float ffmc,ws,gfl,bui,lat,lon,cbh_treatment;
      int time,pattern,mon,jd,jd_min,waz,ps,saz,pc,
           pdf,cur,elev,hour,hourly;
    } inputs;
@@ -76,7 +76,7 @@ char get_fueltype_number(fuel_coefs **ptr,char ft[4]);
 
 float foliar_moisture(inputs *inp, main_outs *at);
 
-float crit_surf_intensity(fuel_coefs *ptr,float fmc);
+float crit_surf_intensity(inputs *inp, fuel_coefs *ptr,float fmc);
 
 float critical_ros(char ft[3],float sfc,float csi);
 

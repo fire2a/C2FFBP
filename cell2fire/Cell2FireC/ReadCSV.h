@@ -53,7 +53,7 @@ public:
 	void printData(std::vector<std::vector<std::string>> & DF);
 	
 	//Populate DF 
-	void parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells);
+	void parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells, std::unordered_map<int,float> cbh_treatments);
 		
 	// Populate NFtypes (Spanish version)
 	void parseNDF(std::vector<int> & NFTypes, std::vector<std::vector<std::string>> & DF, int NCells);

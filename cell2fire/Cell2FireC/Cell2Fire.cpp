@@ -41,6 +41,7 @@ weatherDF wdf[1000000];
 inputs df [9000000];
 std::unordered_map<int, std::vector<float>> BBOFactors;
 std::unordered_map<int, std::vector<int>> HarvestedCells;   
+std::unordered_map<int, float> CBH_treatment;   
 std::vector<int> NFTypesCells;
 
 /******************************************************************************
@@ -179,8 +180,22 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 	// Create empty df with size of NCells
 	df_ptr = & df[0];
 
+	// CBH treatment
+	if(strcmp(this->args.CBH_Treatment.c_str(), EM) != 0){
+		std::string sep = " ";
+		CSVReader CBHPlan(this->args.CBH_Treatment, sep);
+						
+		// Populate CBH treatment vector 
+		std::vector<std::vector<std::string>> CBHTRTDF  = CBHPlan.getData();
+		//CSVHPlan.printData(HarvestedDF);
+		
+		// Cells
+		CSVCBHPlan.parseCBHTRTDF(CBH_treatment, CBHTRTDF);
+	}
+
+
 	// Populate the df [nCells] objects
-	CSVParser.parseDF(df_ptr, DF, this->nCells);
+	CSVParser.parseDF(df_ptr, DF, this->nCells,CBH_treatment);
 
 	// Initialize and populate relevant vectors 
 	this->fTypeCells = std::vector<int> (this->nCells, 1); 
@@ -239,7 +254,35 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 		}
 		std::cout << std::endl;
 	}
+
+		// Harvested cells
+	if(strcmp(this->args.HarvestPlan.c_str(), EM) != 0){
+		std::string sep = ",";
+		CSVReader CSVHPlan(this->args.HarvestPlan, sep);
+						
+		// Populate Ignitions vector 
+		std::vector<std::vector<std::string>> HarvestedDF  = CSVHPlan.getData();
+		//CSVHPlan.printData(HarvestedDF);
+		
+		// Cells
+		int HCellsP = HarvestedDF.size() - 1;
+		CSVHPlan.parseHarvestedDF(HarvestedCells, HarvestedDF, HCellsP);
+		
+		// Print-out
+		std::cout << "\nTo Harvest Cells :" << std::endl;
+		for (auto it = HarvestedCells.begin(); it != HarvestedCells.end(); it++ ){
+			std::cout << " " << it->first << ": ";
+				for (auto & it2 : it->second){
+					std::cout << it2 <<  " ";
+					this->fTypeCells[it2-1] = 0;
+					this->fTypeCells2[it2-1] = "NonBurnable";
+					this->statusCells[it2-1] = 3;
+				}  
+		}
+		std::cout << std::endl;
+	}
 	
+
 	// Relevant sets: Initialization
 	this->availCells.clear();
 	this->nonBurnableCells.clear();

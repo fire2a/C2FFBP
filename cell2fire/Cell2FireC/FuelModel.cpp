@@ -108,7 +108,7 @@ Originally  Written at P.N.F.I.  December 91, by Mike Wotton
     if(at->covertype=='c')
      {
        at->fmc=foliar_moisture(data,at);
-       at->csi=crit_surf_intensity((*ptr),at->fmc);
+       at->csi=crit_surf_intensity(data,(*ptr),at->fmc);
        at->rso=critical_ros(data->fueltype,at->sfc,at->csi);
        firetype=fire_type(at->csi,at->sfi);
        at->ftype=firetype;
@@ -608,10 +608,15 @@ void setup_const(fuel_coefs *ptr)
   }
 
 
-  float crit_surf_intensity(fuel_coefs *ptr, float fmc)
+  float crit_surf_intensity(inputs *inp, fuel_coefs *ptr, float fmc)
   {
    if (ptr->cbh>0){
-   return ( 0.001*pow(ptr->cbh*(460.0+25.9*fmc),1.5) );}
+    if (inp->cbh_treatment>0){
+      return ( 0.001*pow(inp->cbh_treatment*(460.0+25.9*fmc),1.5) );
+    }
+    else{
+        return ( 0.001*pow(ptr->cbh*(460.0+25.9*fmc),1.5) );}
+   }
    else{
     return (999999999); // if cbh is equal to 0, critical intensity is set to big number
    }

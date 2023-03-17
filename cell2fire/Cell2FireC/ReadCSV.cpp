@@ -69,7 +69,7 @@ void CSVReader::printData(std::vector<std::vector<std::string>> & DF){
 /*
 * Populates the df input objects based on the DF csv file for each row/cell (spanish version)
 */
-void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells){
+void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> & DF, int NCells, std::unordered_map<int,float> CBH_treatments){
 	int i;
 	
 	// Floats 
@@ -138,9 +138,15 @@ void CSVReader::parseDF(inputs * df_ptr, std::vector<std::vector<std::string>> &
 		
 		if (DF[i][18].compare("") == 0) pattern = 0;
 		else pattern = 1;// std::stoi (DF[i][18], &sz);
-		
-		
-		
+
+		auto it = CBH_treatments.find(i);
+		if (it!=CBH_treatments.end()){
+			df_ptr->cbh_treatment=it->second;
+			CBH_treatments.erase(it);
+		}
+		else{
+			df_ptr->cbh_treatment=0;
+		}
 		// Set values
 		strncpy(df_ptr->fueltype, faux, 4);
 		df_ptr->mon=mon; df_ptr->jd=jd; /*df_ptr->m=DF[i][3];*/ df_ptr->jd_min=jd_min;
@@ -336,6 +342,27 @@ void CSVReader::parseHarvestedDF(std::unordered_map<int, std::vector<int>> & hc,
 	
 	
 }
+
+
+/*
+* Populate CBH_TREATMENT
+*/
+void CSVReader::parseCBHTRTDF(std::unordered_map<int,float> & cbh_trt, std::vector<std::vector<std::string>> & DF){
+	// Integers
+	int cell, cbh, arr_size;
+	arr_size=DF.size();
+
+	// Loop over cells (populating per row)
+	for (i=0; i <= arr_size; i++){
+		cell=DF[i][0];
+		cbh=DF[i][1];
+		// Populate unordered set 
+		cbh_trt.insert(std::make_pair(cell,cbh));	
+	}
+	
+	
+}
+
 
 /*
 * Populate BBO Tuning factors
