@@ -6,7 +6,7 @@ Created on Sun May 29 05:56:30 2022
 """
 
 import glob
-import rasterio
+#import rasterio
 import os
 import numpy as np
 from matplotlib import pyplot

@@ -114,7 +114,7 @@ void parseArgs(int argc, char* argv[], arguments* args_ptr)
 		printf("OutCrownConsumption: %d \n", out_crown_consumption);
 	}
 		if (cmdOptionExists(argv, argv + argc, "--out-sfc")) {
-		out_crown_consumption = true;
+		out_surface_consumption = true;
 		printf("OutCrownConsumption: %d \n", out_surface_consumption);
 	}
 	
