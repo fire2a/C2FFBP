@@ -181,7 +181,7 @@ void determine_destiny_metrics(inputs* data, fuel_coefs* pt, main_outs* metrics,
     if(metrics->covertype=='c')
      {
        metrics->fmc=foliar_moisture(data,metrics);
-       metrics->csi=crit_surf_intensity((*ptr),metrics->fmc);
+       metrics->csi=crit_surf_intensity(data,(*ptr),metrics->fmc);
        metrics->rso=critical_ros(data->fueltype,metrics->sfc,metrics->csi);
        firetype=fire_type(metrics->csi,metrics->sfi);
        metrics->ftype=firetype;

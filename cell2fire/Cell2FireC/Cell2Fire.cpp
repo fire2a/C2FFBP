@@ -161,6 +161,14 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 	this->coordCells = frdf.coordCells;
 	this->adjCells = frdf.adjCells;
 		
+	// Non burnable types: populate relevant fields such as status and ftype
+	std::string NoFuel = "NF ";
+	std::string NoData = "ND ";
+	std::string Empty = "";
+	const char * NF = NoFuel.c_str();
+	const char * ND = NoData.c_str();
+	const char * EM = Empty.c_str();
+	
 	/********************************************************************
 							Dataframes initialization: Forest and Weather
 	********************************************************************/
@@ -212,14 +220,7 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 	this->ignProb = std::vector<float>(this->nCells, 1);
 	CSVParser.parsePROB(this->ignProb, DF, this->nCells);
 
-	// Non burnable types: populate relevant fields such as status and ftype
-	std::string NoFuel = "NF ";
-	std::string NoData = "ND ";
-	std::string Empty = "";
-	const char * NF = NoFuel.c_str();
-	const char * ND = NoData.c_str();
-	const char * EM = Empty.c_str();
-	
+
 	for(int l=0; l< this->nCells; l++){
 		if (strcmp(df[l].fueltype,NF) == 0 || strcmp(df[l].fueltype, ND) == 0) {
 			this->fTypeCells[l] = 0;

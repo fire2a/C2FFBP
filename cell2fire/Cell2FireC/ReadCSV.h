@@ -72,7 +72,8 @@ public:
 	
 	// Populate Harvested Cells 
 	void parseHarvestedDF(std::unordered_map<int, std::vector<int>> & hc, std::vector<std::vector<std::string>> & DF, int HPeriods);
-	
+	void parseCBHTRTDF(std::unordered_map<int,float> & cbh_trt, std::vector<std::vector<std::string>> & DF){
+
 	// Populate BBO Factors
 	void parseBBODF(std::unordered_map<int, std::vector<float>> & bbo, std::vector<std::vector<std::string>> & DF, int NFTypes);
 	
