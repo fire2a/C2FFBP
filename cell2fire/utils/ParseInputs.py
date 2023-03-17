@@ -169,8 +169,8 @@ def make_parser():
                         dest="spreadPlots",
                         default=False,
                         action='store_true')
-    parser.add_argument("--finalGrid",
-                        help="GGenerate final grid",
+    parser.add_argument("--final-grid",
+                        help="Generate final grid",
                         dest="finalGrid",
                         default=False,
                         action="store_true")
