@@ -189,16 +189,15 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 	df_ptr = & df[0];
 
 	// CBH treatment
-	if(strcmp(this->args.CBH_Treatment.c_str(), EM) != 0){
+	if(strcmp(this->args.CBHTreatment.c_str(), EM) != 0){
 		std::string sep = " ";
-		CSVReader CBHPlan(this->args.CBH_Treatment, sep);
-						
+		CSVReader CBHPlan(this->args.CBHTreatment, sep);
+			
 		// Populate CBH treatment vector 
 		std::vector<std::vector<std::string>> CBHTRTDF  = CBHPlan.getData();
-		//CSVHPlan.printData(HarvestedDF);
-		
+		//CBHPlan.printData(CBHTRTDF);
 		// Cells
-		CSVCBHPlan.parseCBHTRTDF(CBH_treatment, CBHTRTDF);
+		CBHPlan.parseCBHTRTDF(CBH_treatment, CBHTRTDF);
 	}
 
 
@@ -1049,7 +1048,7 @@ std::unordered_map<int, std::vector<int>> Cell2Fire::SendMessages(){
 		if (it->second.ROSAngleDir.size() > 0) {
 			//std::cout << "Entra a Manage Fire" << std::endl;
 			if (!this->args.BBOTuning){  //&df[cell-1] replaced by full df for getting the slopes
-				aux_list = it->second.manageFire(this->fire_period[this->year-1], this->availCells,  df, this->coef_ptr, 
+				aux_list = it->second.manageFire(this->fire_period[this->year-1], this->availCells,  &df[cell-1], this->coef_ptr, 
 															   this->coordCells, this->Cells_Obj, this->args_ptr, &wdf[this->weatherPeriod],
 															   &this->FSCell, &this->crownMetrics,this->surfFraction, this->ROSRV,this->crownState, this->crownFraction, this->Intensities, this->RateOfSpreads, this->FlameLengths);
 			}

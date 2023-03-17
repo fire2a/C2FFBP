@@ -311,6 +311,7 @@ std::vector<int> CellsFBP::manageFire(int period, std::unordered_set<int> & Avai
 		std::cout <<  "mon: " << df_ptr->mon << std::endl;
 		std::cout <<  "jd: " << df_ptr->jd << std::endl;
 		std::cout <<  "jd_min: " << df_ptr->jd_min << std::endl;
+		std::cout <<  "treatment_cbh: " << df_ptr->cbh_treatment << std::endl;
 		std::cout <<  "waz: " << df_ptr->waz << std::endl;
 		std::cout <<  "ps: " << df_ptr->ps << std::endl;
 		std::cout <<  "saz: " << df_ptr->saz << std::endl;
