@@ -189,9 +189,9 @@ Cell2Fire::Cell2Fire(arguments _args) : CSVWeather(_args.InFolder + "Weather.csv
 	df_ptr = & df[0];
 
 	// CBH treatment
-	if(strcmp(this->args.CBHTreatment.c_str(), EM) != 0){
+	if(strcmp(this->args.CBHPlan.c_str(), EM) != 0){
 		std::string sep = " ";
-		CSVReader CBHPlan(this->args.CBHTreatment, sep);
+		CSVReader CBHPlan(this->args.CBHPlan, sep);
 			
 		// Populate CBH treatment vector 
 		std::vector<std::vector<std::string>> CBHTRTDF  = CBHPlan.getData();
